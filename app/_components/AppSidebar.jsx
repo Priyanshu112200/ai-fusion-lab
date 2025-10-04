@@ -20,7 +20,7 @@ export function AppSidebar() {
     setMounted(true);
   }, []);
   return (
-    <Sidebar>
+    <Sidebar className="flex flex-col h-full">
       <SidebarHeader>
         <div className="p-3">
           <div className="flex justify-between items-center">
@@ -39,7 +39,7 @@ export function AppSidebar() {
           <Button className='mt-7 w-full' size="lg">+ New Chat</Button>
         </div>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="flex-1">
         <SidebarGroup>
           <div className='p-3'>
             <h2 className="font-bold text-lg">Chat</h2>
