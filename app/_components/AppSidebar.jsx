@@ -8,19 +8,22 @@ import {
   SidebarHeader,
 } from "@/components/ui/sidebar"
 import { Button } from "@/components/ui/button";
-import { Ghost, Sun, Moon } from "lucide-react";
+import { Ghost, Sun, Moon, User2, Bolt, Zap } from "lucide-react";
 import { useTheme } from "next-themes";
 import React, { useEffect, useState } from "react";
+import { SignInButton, useUser } from "@clerk/nextjs";
+import UsageCreditProgress from "./UsageCreditProgress";
 
 export function AppSidebar() {
   const { theme, setTheme } = useTheme();
+  const {user}=useUser();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
   return (
-    <Sidebar className="flex flex-col h-full">
+  <Sidebar className="flex flex-col h-full z-30">
       <SidebarHeader>
         <div className="p-3">
           <div className="flex justify-between items-center">
@@ -36,20 +39,36 @@ export function AppSidebar() {
               )}
             </div>
           </div>
-          <Button className='mt-7 w-full' size="lg">+ New Chat</Button>
+          {user ?
+            <Button className='mt-7 w-full' size="lg">+ New Chat</Button> :
+            <SignInButton>
+              <Button className='mt-7 w-full' size="lg">+ New Chat</Button>
+            </SignInButton>
+          }
         </div>
       </SidebarHeader>
       <SidebarContent className="flex-1">
         <SidebarGroup>
           <div className='p-3'>
             <h2 className="font-bold text-lg">Chat</h2>
-            <p className="text-sm text-gray-400">Sign In To Start Chatting With Multiple AI Models</p>
+            {!user&&<p className="text-sm text-gray-400">Sign In To Start Chatting With Multiple AI Models</p>}
           </div>
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
         <div className="p-3 mb-10">
-          <Button className={'w-full'} size={'lg'}>Sign In/Sign Up</Button>
+         {!user? <SignInButton mode="modal">
+            <Button className={'w-full'} size={'lg'}>Sign In/Sign Up</Button>
+          </SignInButton>
+            :
+            <div>
+              <UsageCreditProgress />
+              <Button className={'w-full mb-3'}> <Zap /> Upgrade Plan </Button>
+              <Button className="flex" variant={'ghost'}>
+                <User2 /> <h2>Settings</h2>
+              </Button>
+            </div>
+         }
         </div>
       </SidebarFooter>
     </Sidebar>
